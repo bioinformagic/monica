@@ -1,0 +1,3 @@
+IN THIS DIRECTORY ---
+
+all core code (for the pipeline buildup) needs to be stored here.

@@ -1,0 +1,3 @@
+IN THIS DIRECTORY ---
+
+all support code (libraries and modules created by us) needs to be stored here.
