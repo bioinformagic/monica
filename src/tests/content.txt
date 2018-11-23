@@ -1,0 +1,12 @@
+IN THIS DIRECTORY ---
+
+All test for libraries will be stored here.
+
+QUICK RECAP ON HOW TO WRITE TESTS:
+Unittest is automated so to look for exclusively files with the pattern test_* SO MAKE SURE YOU GOT IT RIGHT if you want your test to work properly.
+
+For each test, declare a Class and inherit it from unittest.TestCase. Each function that will serve as test needs to have the pattern test_*.
+
+Apply DRY philosophy to your testing code as it will make debugging and changes a bit more comfy.
+
+Test everything. Literally, everything that comes to your mind.
