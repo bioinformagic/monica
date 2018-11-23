@@ -1,7 +1,5 @@
 language: python
 python:
-  - "3.5"
-  - "3.6"
   - "3.7-dev"
 install:
   - sudo apt-get update
@@ -13,7 +11,8 @@ install:
   - conda update -q conda
   # Useful for debugging any issues with conda
   - conda info -a
-  
+
+  - export TRAVIS_PYTHON_VERSION=$(python --version)
   - conda env create -q -n test-environment python=$TRAVIS_PYTHON_VERSION
   - source activate test-environment
   - while read requirement; do conda install --yes $requirement; done < monica-requirements.txt
