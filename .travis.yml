@@ -12,7 +12,7 @@ install:
   # Useful for debugging any issues with conda
   - conda info -a
 
-  - conda env create --yes --file monica-requirements.yml
+  - conda env create -q --file monica-requirements.yml
   - source activate monica
 
 script:
