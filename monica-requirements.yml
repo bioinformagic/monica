@@ -31,5 +31,6 @@ dependencies:
   - wheel=0.32.3=py37_0
   - xz=5.2.4=h14c3975_4
   - zlib=1.2.11=ha838bed_2
+
 prefix: /home/simone/anaconda3/envs/monica
 
