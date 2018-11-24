@@ -20,4 +20,4 @@ install:
 
 
 script:
-  - python -m unittest discovery
+  - python -m unittest
