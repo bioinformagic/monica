@@ -1,0 +1,5 @@
+# PORECHOP
+git clone https://github.com/rrwick/Porechop.git
+cd Porechop
+python3 setup.py install
+
