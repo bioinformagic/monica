@@ -10,8 +10,8 @@ from multiprocessing import Pool
 
 def ftp_fasta(input_user):
 
-    """ From genseq or refseq id to assembly FTP fasta."""
-
+    """ From GenBank or RefSeq id to assembly FTP fasta."""
+    
     assert type(input_user) == str
 
     letter = input_user.split("_")
