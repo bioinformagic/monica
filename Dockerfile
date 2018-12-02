@@ -11,7 +11,7 @@ RUN git clone https://github.com/bioinformagic/monica
 
 RUN git clone https://github.com/rrwick/Porechop.git && cd Porechop && python3 setup.py install
 
-RUN wget ftp.ncbi.nlm.nih.gov/blast/executables/magicblast/LATEST/ncbi-magicblast-1.4.0-x64-linux.tar.gz && tar xvfz ncbi-magicblast-1.4.0-x64-linux.tar.gz && cd ncbi-magicblast-1.4.0/bin && ln -s ./magicblast /usr/local/bin/magicblast && ln -s ./makeblastdb /usr/local/bin/makeblastdb
+RUN wget ftp.ncbi.nlm.nih.gov/blast/executables/magicblast/LATEST/ncbi-magicblast-1.4.0-x64-linux.tar.gz && \ tar xvfz ncbi-magicblast-1.4.0-x64-linux.tar.gz && cd ncbi-magicblast-1.4.0/bin && \ ln -s ./magicblast /usr/local/bin/magicblast && ln -s ./makeblastdb /usr/local/bin/makeblastdb
 
 
 
