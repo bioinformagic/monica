@@ -6,11 +6,9 @@ def hit_counter(barcodes):
         paths = barcodes[k]
         genomes = dict()
         for i in paths:
-            print(i)
             command = f"samtools view {i}  | cut -f 3"
             list_gi = shell_runner(command)
             list_gi = list_gi[:-1]
-            print(list_gi)
             for gi in list_gi:
                 if gi == '*':
                     gi = 'unmapped'
