@@ -1,6 +1,6 @@
 import os
-import libs.dbees
-import libs.bammer
+import libs.dbees as dbees
+import libs.bammer as bammer
 from src.piper_pan import shell_runner, stop_deepbinner
 
 MAGIC_BLAST = 'magicblast -query ./%s.fastq -db %s -splice F -outfmt sam | samtools view -B -o %s/bams/%s.bam -'
