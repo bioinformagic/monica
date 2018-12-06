@@ -3,6 +3,11 @@ git clone https://github.com/rrwick/Porechop.git
 cd Porechop
 python3 setup.py install
 
+
+#DeepBinner
+git clone https://github.com/rrwick/Deepbinner.git
+pip3 install ./Deepbinner
+
 # MAGIC BLAST
 wget -o ftp://ftp.ncbi.nlm.nih.gov/blast/executables/magicblast/LATEST/ncbi-magicblast-1.4.0-x64-linux.tar.gz
 tar xvfz ncbi-magicblast-1.4.0-x64-linux.tar.gz
