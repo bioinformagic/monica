@@ -36,3 +36,22 @@ class GoodOvernight():
 
 #example GoodOvernight.unmapped_extractor('/home/pepsi/Documents/Università/Bioinformatics2/mapped', '/home/pepsi/Documents/Università/Bioinformatics2/unmapped')
 #example GoodOvernight.biomarter([])
+
+    def master_blaster():
+
+    """Blast the unmapped reads and returns the GenBank IDs"""
+
+        id_list = []
+        # os.chdir("~Desktop/unmmaped_fasta")
+        blasting = subprocess.call("ls *.fa | parallel 'blastn -query {} -db nt -remote -num_alignments 1 -outfmt 6 -out {.}.out'", shell = True)
+        get_id = subprocess.call("cut -f 2 *.out > list_ids.txt", shell = True)
+        with open("list_ids.txt") as file:
+            output = [id_list.append(line.strip()) for line in file]
+
+        return id_list
+    
+    
+if __name__ == "__main__":
+    goodOvernight = GoodOvernight()
+        
+        
