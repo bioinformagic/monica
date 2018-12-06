@@ -5,6 +5,9 @@ from src.piper_pan import shell_runner, stop_deepbinner
 
 MAGIC_BLAST = 'magicblast -query ./%s.fastq -db %s -splice F -outfmt sam | samtools view -B -o %s/bams/%s.bam -'
 
+import subprocess as subp
+import multiprocessing as mp
+
 
 class Experiment():
     """
@@ -24,6 +27,8 @@ class Experiment():
     def __init__(self,
                  dirname=os.getcwd(),
                  gi_list="",
+                 threads=mp.cpu_count(),
+                 num_barcodes=12):
                  threads=1,
                  num_barcodes=12,
                  max_hours=48,
