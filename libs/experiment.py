@@ -41,7 +41,7 @@ class Experiment():
         self.running_processes = list()
         for i in range(num_barcodes):
             barcode = 'BC' + str(i)
-            self.barcodes[barcode] = list()
+        self.barcodes[barcode] = list()
 
     def query(self, filename, barcode):
         """
@@ -89,4 +89,4 @@ class Experiment():
             bammer.merge_bams(self.barcodes)
             #iterate through open processes and end them all
         else:
-            print("Can close a running experiment, try to STOP it first.")
+            print("Can't close a running experiment, try to STOP it first.")
