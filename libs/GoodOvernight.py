@@ -9,7 +9,7 @@ class GoodOvernight():
     def __init__(self):
         pass
 
-    def unmapped_extractor(exp_output, unmapped_path):  # this creates fasta files over unmapped bam sequences
+    def unmapped_extractor(self, exp_output, unmapped_path):  # this creates fasta files over unmapped bam sequences
         list_bam_files = []
         for file in os.listdir(exp_output):
             if file.endswith('.bam'):

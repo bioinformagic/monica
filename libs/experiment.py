@@ -2,11 +2,9 @@ import os
 import libs.dbees as dbees
 import libs.bammer as bammer
 from src.piper_pan import shell_runner, shell_stopper
+import multiprocessing as mp
 
 MAGIC_BLAST = 'magicblast -query ./%s.fastq -db %s -splice F -outfmt sam | samtools view -B -o %s/bams/%s.bam -'
-
-import subprocess as subp
-import multiprocessing as mp
 
 
 class Experiment():
@@ -26,14 +24,14 @@ class Experiment():
 
     def __init__(self,
                  dirname=os.getcwd(),
-                 gi_list="",
+                 id_list="",
                  threads=mp.cpu_count(),
                  num_barcodes=12,
                  max_hours=48,
                  ):
 
         self.dirname = dirname
-        self.database = dbees.make_db(gi_list)
+        self.database = dbees.make_db(id_list)
         self.threads = threads
         self.barcodes = dict()
         self.status = None
@@ -41,7 +39,7 @@ class Experiment():
         self.running_processes = list()
         for i in range(num_barcodes):
             barcode = 'BC' + str(i)
-        self.barcodes[barcode] = list()
+            self.barcodes[barcode] = list()
 
     def query(self, filename, barcode):
         """
