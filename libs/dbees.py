@@ -17,7 +17,7 @@ def db_exist(id_list):
     """
     with pd.read_csv("dblisting.csv", header=1) as dblisting:
         covered_ids = dblisting.ID.loc[dblisting.ID.isin(id_list)]
-        covered_dbs = dblisting.database.loc[dblisting.ID.isin(covered_ids)]
+        covered_dbs = dblisting.database.loc[dblisting.ID.isin(covered_ids)].tolist()
 
     # list the difference between the user list and the ones found locally
     non_covered = list(set(id_list).difference(covered_ids))
