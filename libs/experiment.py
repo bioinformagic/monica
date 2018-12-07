@@ -3,6 +3,7 @@ import libs.dbees as dbees
 import libs.bammer as bammer
 from src.piper_pan import shell_runner, shell_stopper
 import multiprocessing as mp
+import pickle as pk
 
 MAGIC_BLAST = 'magicblast -query ./%s.fastq -db %s -splice F -outfmt sam | samtools view -B -o %s/bams/%s.bam -'
 
@@ -23,13 +24,14 @@ class Experiment():
     """
 
     def __init__(self,
+                 expname,
                  dirname=os.getcwd(),
                  id_list="",
                  threads=mp.cpu_count(),
                  num_barcodes=12,
                  max_hours=48,
                  ):
-
+        self.expname = expname
         self.dirname = dirname
         self.database = dbees.make_db(id_list)
         self.threads = threads
@@ -88,3 +90,12 @@ class Experiment():
             #iterate through open processes and end them all
         else:
             print("Can't close a running experiment, try to STOP it first.")
+
+def common_names_generator():
+    """
+    de-pickles the list of common names from refseq db and feeds it to the starting page as a list
+    :return:
+    """
+    # TODO fix function
+    #list = pk.load()
+    pass
