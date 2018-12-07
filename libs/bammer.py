@@ -17,3 +17,13 @@ def hit_counter(barcodes):
         counts[k] = genomes
     return(counts)
 
+
+def merge_bam(barcodes):
+    barcodes_merged = dict()
+    for k in barcodes.keys():
+        paths_to_bam = ' '.join(barcodes[k])
+        command = f"samtools merge -f {k}_merged.bam {paths_to_bam} | readlink -f {k}_merged.bam"   #readlink -f returns the path of the file
+        path_to_merged = shell_runner(command)
+        barcodes_merged[k] = path_to_merged[:-1]
+    return barcodes_merged
+
