@@ -1,7 +1,7 @@
 import os
 import libs.dbees as dbees
 import libs.bammer as bammer
-from src.piper_pan import shell_runner, stop_deepbinner
+from src.piper_pan import shell_runner, shell_stopper
 
 MAGIC_BLAST = 'magicblast -query ./%s.fastq -db %s -splice F -outfmt sam | samtools view -B -o %s/bams/%s.bam -'
 
@@ -28,8 +28,6 @@ class Experiment():
                  dirname=os.getcwd(),
                  gi_list="",
                  threads=mp.cpu_count(),
-                 num_barcodes=12):
-                 threads=1,
                  num_barcodes=12,
                  max_hours=48,
                  ):
@@ -89,7 +87,6 @@ class Experiment():
         """
         if self.status == "finished":
             bammer.merge_bams(self.barcodes)
-            stop_deepbinner()
-            stop_albacore()
+            #iterate through open processes and end them all
         else:
             print("Can close a running experiment, try to STOP it first.")
