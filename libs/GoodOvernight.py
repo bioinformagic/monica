@@ -21,10 +21,8 @@ class GoodOvernight():
                 shell=True)
 
     def biomarter(list):
-        wget.download(
-            'https://biodbnet-abcc.ncifcrf.gov/webServices/rest.php/biodbnetRestApi.xml?method=db2db&format=row&input=genesymbol&inputValues=' + ','.join(
-                list) + '&outputs=refseqgenomicgi')  # This line of code downloads from db2db a xml file  with a specific filename
-        # that is biodbnetRestApi.xml
+        wget.download('https://biodbnet-abcc.ncifcrf.gov/webServices/rest.php/biodbnetRestApi.xml?method=db2db&format=row&input=geneid&inputValues=' + ','.join(list) + '&outputs=refseqgenomicgi')#This line of code downloads from db2db a xml file  with a specific filename
+        #that is biodbnetRestApi.xml
         file = 'biodbnetRestApi.xml'
         root = parXML.parse(file).getroot()  # this line initializes the xml file so to be parsed
         levels = root.findall('.//item')
@@ -64,3 +62,5 @@ class GoodOvernight():
 
 if __name__ == "__main__":
     goodOvernight = GoodOvernight()
+        
+        
