@@ -2,6 +2,7 @@ FROM ubuntu:16.04
 
 WORKDIR /usr/local/bin/
 
+# Dependencies
 RUN apt update && apt install -y \
     build-essential \
     curl \
