@@ -1,8 +1,12 @@
 import os
-import glob
-import subprocess as subp
-# import dbees
-# import bammer
+import libs.dbees as dbees
+import libs.bammer as bammer
+from src.piper_pan import shell_runner, shell_stopper
+import multiprocessing as mp
+import pickle as pk
+
+MAGIC_BLAST = 'magicblast -query ./%s.fastq -db %s -splice F -outfmt sam | samtools view -B -o %s/bams/%s.bam -'
+
 
 class Experiment():
     """
@@ -20,23 +24,28 @@ class Experiment():
     """
 
     def __init__(self,
+                 expname,
                  dirname=os.getcwd(),
-                 gi_list="",
-                 threads=1,
-                 num_barcodes=12):
-        # TODO strip files from extensions
+                 id_list="",
+                 threads=mp.cpu_count(),
+                 num_barcodes=12,
+                 max_hours=48,
+                 ):
+        self.expname = expname
         self.dirname = dirname
-        self.database = dbees.make_db(gi_list)
+        self.database = dbees.make_db(id_list)
         self.threads = threads
         self.barcodes = dict()
         self.status = None
+        self.time = max_hours
+        self.running_processes = list()
         for i in range(num_barcodes):
             barcode = 'BC' + str(i)
-            barcode_glob = f"./{barcode}*"
-            self.barcodes[barcode] = glob.glob(barcode_glob)
+            self.barcodes[barcode] = list()
 
-    def query(self):
+    def query(self, filename, barcode):
         """
+        :param filename: string, $(basename filename .fastq) stripped extension fastq
         function that:
         - prepares the magic-blast query
         - transform the sam output into bam
@@ -45,16 +54,48 @@ class Experiment():
         - reset the status to ready when finished
         """
         self.status = "processing"
-        for barcode, filelist in self.barcodes.items():
-            for filename in filelist:
-                file_query = f'magicblast -query ./{filename} -db {self.database} -outfmt sam | ' \
-                             f'samtools view -Sb - > {self.dirname}/bams/{filename}.bam'
-                magicblastsam = subp.check_output(file_query, shell=True)
+
+        # launch the magicblast query for the specific file
+        # -splice F cause it is not freaking RNA
+        file_query = f'magicblast -query ./{filename}.fastq -db {self.database} -splice F -outfmt sam | ' \
+                     f'samtools view -B -o {self.dirname}/bams/{filename}.bam -'
+
+        shell_runner(file_query)
+
+        # add filename to the list of barcodes
+        self.barcodes[barcode].append(filename)
 
         self._stream()
 
         self.status = "ready"
 
-
     def _stream(self):
-        pass
+        """
+        This funtion takes in bams from /bams/newbams
+        for each file in the directory
+        calls bammer.hit_counter(self.barcodes)
+        yields the dictionary produced by hit_counter
+        :return:
+        """
+
+        yield bammer.hit_counter(self.barcodes)
+
+    def end_realtime(self):
+        """
+        checks if experiment is over (by self.status), then merge_bams into 12 different bams
+        :return:
+        """
+        if self.status == "finished":
+            bammer.merge_bams(self.barcodes)
+            #iterate through open processes and end them all
+        else:
+            print("Can't close a running experiment, try to STOP it first.")
+
+def common_names_generator():
+    """
+    de-pickles the list of common names from refseq db and feeds it to the starting page as a list
+    :return:
+    """
+    # TODO fix function
+    #list = pk.load()
+    pass
