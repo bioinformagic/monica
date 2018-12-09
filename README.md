@@ -35,7 +35,7 @@ docker-compose run tf
 # bash build.sh
 ```
 
-Note: The CPU works well when tested. Subprocess + others have too be added though. THe GPU has to be tested.
+Note: The CPU works well when tested. Subprocess + others have too be added though. The GPU has to be tested.
 
 ---
 
