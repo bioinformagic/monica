@@ -1,6 +1,7 @@
 from src.piper_pan import shell_runner
 import requests
 import pandas as pd
+import ncbi_genome_download as ngd
 
 
 # BASIC_URL='https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=%s&rettype=fasta'
@@ -15,8 +16,8 @@ def db_exist(id_list):
     :param id_list list: list of IDs picked by the user
     :return: tuple (covered_ids, covered_dbs, non_covered)
     """
-    with pd.read_csv("dblisting.csv", header=1) as dblisting:
-        covered_ids = dblisting.ID.loc[dblisting.ID.isin(id_list)]
+    with pd.read_csv("dblisting.csv", header=0) as dblisting:
+        covered_ids = dblisting.ID.loc[dblisting.ID.isin(id_list)].tolist()
         covered_dbs = dblisting.database.loc[dblisting.ID.isin(covered_ids)].tolist()
 
     # list the difference between the user list and the ones found locally
@@ -42,17 +43,18 @@ def write_to_dblisting(id_list):
     pass
 
 
-def download_db(id_list, PATH, exp_name):
+def download_db(taxids, PATH, exp_name):
     """
     Downloads and create a BLAST database in the $BLASTDB path
 
-    :param id_list: list of identifiers for your sequences (both GI and refseq ID and Assembly accession)
+    :param taxids: list of identifiers for your sequences (taxids)
     :param PATH: PATH to where your fasta file will be downloaded
     :param exp_name: name of the Experiment that will be used to name the database
     :return: None
     """
     # TODO exp_name may be changed to a uuid
-    joint_gi = ','.join(id_list)
+    joint_gi = ','.join(taxids)
+    #
     query = f'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id={joint_gi}&rettype=fasta'
     fastas_requests = requests.get(query)
 
@@ -84,3 +86,14 @@ def check_db_integrity():
     :return bool:
     """
     pass
+
+def names_to_taxid(names):
+    """
+    accepts a list of common names and returns a list of taxids
+    :param names:
+    :return:
+    """
+    with pd.read_csv('refseq_translator.tsv', header=0, sep='\t') as refseq:
+        taxids = refseq.taxid.loc[refseq.organism_name.isin(names)].tolist()
+
+    return taxids
