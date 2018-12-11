@@ -5,13 +5,15 @@ Built with <3 by Bioinformatics Bachelor Class of 2015, La Sapienza, 2018
 """
 
 import subprocess
-from subprocess import PIPE
 import sys
+import json
 
 
-def read_MK_info():
-    # function to read the directory information of the user_conf (json)
-    return None
+def read_MK_info(conf_file='/opt/ONT/MinKNOW/conf/user_conf'):
+    with open(conf_file) as json_data:
+        conf_params = json.load(json_data)
+
+    return conf_params['user']['output_dirs']['base']['value0']
 
 
 def run_deepbinner(experiment, cpuonly):
