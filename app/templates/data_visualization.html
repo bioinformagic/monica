@@ -1,0 +1,132 @@
+<!--TO IMPROVE: 1. modify: visualize data provided by flask or a directory (Plots, table, pathogens list, ...)
+                2. number of barCode link creation, depending on the number of samples
+                3. adaptation of the code to each barCode  (flask dependent(?))
+                4. DESIGN
+                5. pathogens list: input as text to filter the results
+                6. "statistics" content
+                -->
+
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/css/bootstrap-select.min.css">
+<title>Page Title</title>
+</head>
+<body style="background: midnightblue">
+
+<h1></h1>
+
+<div id="header">
+    <p style="text-align: center; color: white; font-family:'Sawasdee'; font-size:xx-large; font-weight: bolder">Monica</p>
+</div>
+
+<!-- BarCode division body-->
+<div class="card text-center">
+  <div class="card-header">
+    <ul class="nav nav-tabs card-header-tabs">
+      <li class="nav-item">
+       <!--for loop might be use to create barCode links-->
+        <a class="nav-link active" href="#">Bc1</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Bc2</a>
+      </li>
+    </ul>
+  </div>
+
+
+<!-- subdivision of data-->
+  <div class="card-body" style="background: wheat">
+  <!--data on the FIRST ROW-->
+    <div class="container-fluid">
+        <div class="row">
+
+            <div id="sunsburst" class="col-lg" >
+                <div class="card text-white bg-success mb-3 shadow p-3 rounded">
+                    <h4 class="card-title">Plot1</h4>
+                    <h6 class="card-subtitle">sunburst plot</h6>
+                    <img class="card-img-top" src="https://i.stack.imgur.com/9978Z.png" alt="Card image cap">
+                </div>
+            </div>
+
+            <div id="statistics" class="col-lg" >
+                <div class="card text-white bg-warning mb-3 shadow p-3 rounded" >
+                    <h4 class="card-title">statistics</h4>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+  <!-- data on the SECOND ROW-->
+    <div class="container-fluid">
+        <div class="row">
+
+            <div id="frequency" class="col-lg" >
+                <div class="card text-white bg-success mb-3 shadow p-3 rounded">
+                    <h5 class="card-title">Plot3</h5>
+                    <h6 class="card-subtitle">read length vs Frequency</h6>
+                    <img class="card-img-top" src="https://analyse-it.com/docs/user-guide/distribution/images/histogram.png" alt="Card image cap">
+                </div>
+            </div>
+
+            <div id="taxonomy" class="col-lg" >
+                <div class="card text-white bg-success mb-3 shadow p-3 rounded" >
+                    <h5 class="card-title">Plot4</h5>
+                    <h6 class="card-subtitle">phylogenetic tree</h6>
+                    <img class="card-img-top" src="http://bioweb.uwlax.edu/bio203/2011/andryscz_tyle/images/Opium%20phylogenetic%20tree%202.jpg"
+                         alt="Card image cap">
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+   <!-- data on THIRD ROW-->
+    <div class="container-fluid">
+        <!--searchbar to find if a specific pathogen is present in the sample-->
+        <div class="input-group-prepend">
+            <!--may introduce a for loop to list present all the pathogens-->
+            <!--TO IMPROVE: input text, filter results-->
+            <select class="custom-select" id="inputGroupSelect01">
+                <option selected> Pathogen...</option>
+                <option>xylella</option>
+                <option>fusarium </option>
+                <option> whatever</option>
+            </select>
+        </div>
+
+        <!--TABLE about abundances-->
+        <h3> Abundancy rank</h3>
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Pathogen</th>
+                    <th scope="col">Abundance</th>
+                </tr>
+            </thead>
+            <tbody>
+            <!--may use for loop to insert pathogens/abundance-->
+                <tr>
+                    <th scope="row">xylella fastidiosa </th>
+                    <td>a lot</td>
+                </tr>
+                <tr>
+                    <th scope="row">fusarium oxysporum </th>
+                    <td>a lot, but less than xylella</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+  </div>
+
+</div>
+
+
+</body>
+</html>
