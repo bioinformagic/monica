@@ -1,7 +1,7 @@
 import os
 import dbees as dbees
 import bammer as bammer
-from src.piper_pan import shell_runner, shell_stopper
+from src.piper_pan import shell_runner, shell_runner_realtime, shell_realtime_stopper
 import multiprocessing as mp
 import pickle as pk
 
@@ -86,7 +86,7 @@ class Experiment():
         """
         if self.status == "finished":
             bammer.merge_bams(self.barcodes)
-            # iterate through open processes and end them all
+            shell_realtime_stopper(self.running_processes)
         else:
             print("Can't close a running experiment, try to STOP it first.")
 
