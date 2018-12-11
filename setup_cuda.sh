@@ -16,14 +16,14 @@ else
 fi
 
 # Setup cuDNN URL
-if [ "$CUDNN_VERSION" = "7.0" ]; then
+if [ "$CUDNN_VERSION" = "7.4" ]; then
     if [ "$CUDA_VERSION" = "9.0" ]; then
-        CUDNN_VERSION_DETAILED="7.0.5.15"
-    elif [ "$CUDA_VERSION" = "9.1" ]; then
-        CUDNN_VERSION_DETAILED="7.0.5.15"
-    elif [ "$CUDA_VERSION" = "9.2" ]; then
-        echo "Error: CUDNN 7.0 is not compatible with CUDA 9.2."
-        exit -1
+         CUDNN_VERSION_DETAILED="7.4.1.5"
+    #elif [ "$CUDA_VERSION" = "9.1" ]; then
+     #   CUDNN_VERSION_DETAILED="7.0.5.15"
+    #elif [ "$CUDA_VERSION" = "9.2" ]; then
+     #   echo "Error: CUDNN 7.0 is not compatible with CUDA 9.2."
+      #  exit -1
     fi
 elif [ "$CUDNN_VERSION" = "7.1" ]; then
     if [ "$CUDA_VERSION" = "9.0" ]; then
