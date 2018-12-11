@@ -97,3 +97,4 @@ def names_to_taxid(names):
         taxids = refseq.taxid.loc[refseq.organism_name.isin(names)].tolist()
 
     return taxids
+

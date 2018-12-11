@@ -1,7 +1,7 @@
 import os
 import dbees as dbees
 import bammer as bammer
-from src.piper_pan import shell_runner, shell_runner_realtime, shell_realtime_stopper
+from src.piper_pan import shell_runner, shell_runner_realtime, shell_realtime_stopper, run_deepbinner, read_MK_info
 import multiprocessing as mp
 import pickle as pk
 
@@ -18,7 +18,7 @@ class Experiment():
     - files organized per barcode
     - status of the experiment (ready | processing | finished)
     - bam files organization and final merging
-    - streaming data to the web ui
+    - streaming data to the web uif
 
 
     """
@@ -43,9 +43,30 @@ class Experiment():
             barcode = 'BC' + str(i)
             self.barcodes[barcode] = list()
 
-    def query(self, filename, barcode):
+    def __enter__(self):
         """
-        :param filename: string, $(basename filename .fastq) stripped extension fastq
+        CONTEXT MANAGER
+        launch all system-side processes
+        all comfortably packed into a context manager
+        :return:
+        """
+        self.run_deepbinner()
+
+        albacore_string = ''
+
+        shell_runner_realtime(self.running_processes, "albacore", albacore_string)
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        """
+        CONTEXT MANAGER CLOSING
+
+        """
+        shell_realtime_stopper(self.running_processes)
+        self.end_realtime()
+
+    def query(self, filenames, barcode):
+        """
+        :param filenames: string, $(basename filename .fastq) stripped extension fastq
         function that:
         - prepares the magic-blast query
         - transform the sam output into bam
@@ -54,21 +75,21 @@ class Experiment():
         - reset the status to ready when finished
         """
         self.status = "processing"
+        for fastq in filenames:
+            # launch the magicblast query for the specific file
+            # -splice F cause it is not freaking RNA
+            file_query = f'magicblast -query ./{fastq}.fastq -db {self.database} -splice F -outfmt sam | samtools view -B -o {self.dirname}/bams/{barcode}/{fastq}.bam -'
 
-        # launch the magicblast query for the specific file
-        # -splice F cause it is not freaking RNA
-        file_query = f'magicblast -query ./{filename}.fastq -db {self.database} -splice F -outfmt sam | samtools view -B -o {self.dirname}/bams/{filename}.bam -'
+            shell_runner(file_query)
 
-        shell_runner(file_query)
+        self._stream(filenames)
 
         # add filename to the list of barcodes
-        self.barcodes[barcode].append(filename)
-
-        self._stream()
+        self.barcodes[barcode].append(filenames)
 
         self.status = "ready"
 
-    def _stream(self):
+    def _stream(self, filenames):
         """
         This funtion takes in bams from /bams/newbams
         for each file in the directory

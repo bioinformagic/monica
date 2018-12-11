@@ -10,6 +10,7 @@ def common_names_generator():
     de-pickles the list of common names from refseq db and feeds it to the starting page as a list
     :return:
     """
+    pass
 
 
 @app.route('/')
