@@ -58,6 +58,10 @@ class GoodOvernight():
             output = [id_list.append(line.strip()) for line in file]
 
         return id_list
+    
+     def ftp_downlaod(ftp_list):
+        for ftp in ftp_list:
+            wget.download(ftp)
 
 
 if __name__ == "__main__":
