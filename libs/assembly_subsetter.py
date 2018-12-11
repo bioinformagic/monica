@@ -50,6 +50,10 @@ class RefseqSubsetter():
             taxids=pd.DataFrame.from_records(self.descendants, columns=['taxid'])
             self.table=self.table.merge(taxids, on='taxid')
             ftps=self.table['ftp_path']
+        
+     def ftp_downlaod(ftps):
+        for ftp in ftps:
+            wget.download(ftp)
 
 
 if __name__ == '__main__':
