@@ -2,6 +2,7 @@ name: monica
 channels:
   - defaults
 dependencies:
+  - biopython=1.72=py37h04863e7_0
   - blas=1.0=mkl
   - ca-certificates=2018.03.07=0
   - certifi=2018.10.15=py37_0
@@ -17,6 +18,7 @@ dependencies:
   - ncurses=6.1=hf484d3e_0
   - numpy=1.15.4=py37h1d66e8a_0
   - numpy-base=1.15.4=py37h81de0dd_0
+  - openssl=1.1.1a=h7b6447c_0
   - pandas=0.23.4=py37h04863e7_0
   - pip=18.1=py37_0
   - python=3.7.1=h0371630_3
@@ -30,6 +32,12 @@ dependencies:
   - wheel=0.32.3=py37_0
   - xz=5.2.4=h14c3975_4
   - zlib=1.2.11=ha838bed_2
-
-prefix: /home/simone/anaconda3/envs/monica
+  - pip:
+    - biomart==0.9.2
+    - chardet==3.0.4
+    - ete3==3.1.1
+    - idna==2.7
+    - requests==2.20.1
+    - urllib3==1.24.1
+prefix: /home/drq/miniconda3/envs/monica
 
