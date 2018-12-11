@@ -33,15 +33,14 @@
             </div>
             <div class="form-col" style="padding-top: 10px">
                 <!-- TODO fix placeholder -->
-                <input type="file" class="form-control-file" name="dirname" id="dirname" directory webkitdirectory
-                       placeholder="Directory of the experiment">
+                <input onchange="getFolder(event)" type="file" class="form-control-file" name="dirname" id="dirname" directory webkitdirectory>
             </div>
         </div>
         <select class="selectpicker form-control" name="species_list" multiple data-live-search="true" data-width="100%"
                 title="Select the species to live-track" style="padding: 10px">
-            <option>Cherries and wine</option>
-            <option>Rosemary and Thyme</option>
-            <!-- TODO add db list with Jinja template-->
+            {{ for name in data }}
+                <option>Cherries</option>
+            {{ end for }}
         </select>
 
     </div>

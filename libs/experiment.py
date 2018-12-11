@@ -1,6 +1,6 @@
 import os
-import libs.dbees as dbees
-import libs.bammer as bammer
+import dbees as dbees
+import bammer as bammer
 from src.piper_pan import shell_runner, shell_stopper
 import multiprocessing as mp
 import pickle as pk
@@ -57,8 +57,7 @@ class Experiment():
 
         # launch the magicblast query for the specific file
         # -splice F cause it is not freaking RNA
-        file_query = f'magicblast -query ./{filename}.fastq -db {self.database} -splice F -outfmt sam | ' \
-                     f'samtools view -B -o {self.dirname}/bams/{filename}.bam -'
+        file_query = f'magicblast -query ./{filename}.fastq -db {self.database} -splice F -outfmt sam | samtools view -B -o {self.dirname}/bams/{filename}.bam -'
 
         shell_runner(file_query)
 
@@ -87,9 +86,10 @@ class Experiment():
         """
         if self.status == "finished":
             bammer.merge_bams(self.barcodes)
-            #iterate through open processes and end them all
+            # iterate through open processes and end them all
         else:
             print("Can't close a running experiment, try to STOP it first.")
+
 
 def common_names_generator():
     """
@@ -97,5 +97,5 @@ def common_names_generator():
     :return:
     """
     # TODO fix function
-    #list = pk.load()
-    pass
+    list_names = pk.load(file="libs/common_names.pk")
+    return list_names
