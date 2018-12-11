@@ -12,7 +12,7 @@ class Experiment():
     """
     class that manages information about:
 
-    - directory where files are stored
+    - directory where fastq are stored
     - database to query against
     - number of threads to use
     - files organized per barcode
@@ -40,7 +40,7 @@ class Experiment():
         self.time = max_hours
         self.running_processes = list()
         for i in range(num_barcodes):
-            barcode = 'BC' + str(i)
+            barcode = str(i)
             self.barcodes[barcode] = list()
 
     def __enter__(self):
@@ -75,11 +75,11 @@ class Experiment():
         - reset the status to ready when finished
         """
         self.status = "processing"
+        shell_runner(f"mkdir -p {self.dirname}/{barcode}/bams/")
         for fastq in filenames:
             # launch the magicblast query for the specific file
             # -splice F cause it is not freaking RNA
-            file_query = f'magicblast -query ./{fastq}.fastq -db {self.database} -splice F -outfmt sam | samtools view -B -o {self.dirname}/bams/{barcode}/{fastq}.bam -'
-
+            file_query = f'magicblast -query {self.dirname}/{barcode}/{fastq}.fastq -db {self.database} -splice F -outfmt sam | samtools view -B -o {self.dirname}/{barcode}/bams/{fastq}.bam -'
             shell_runner(file_query)
 
         self._stream(filenames)
