@@ -10,6 +10,7 @@ import json
 
 
 def read_MK_info(conf_file='/opt/ONT/MinKNOW/conf/user_conf'):
+    #Reads data from the user_conf file of the MiniKnow application (Optoinal conf_file can be loaded)
     with open(conf_file) as json_data:
         conf_params = json.load(json_data)
 
@@ -17,8 +18,17 @@ def read_MK_info(conf_file='/opt/ONT/MinKNOW/conf/user_conf'):
 
 
 def run_deepbinner(experiment, cpuonly):
+    #Method for initiating deepbinner that assembles the code and starts the process
     basecommand = "deepbinner realtime"
+    in_dir = read_MK_info()
+    out_dir = experiment.dirname
+    if cpuonly:
+        gpu = "1"
+    else:
+        gpu = "{'GPU': 1}"
 
+    command = basecommand+" --indir "+in_dir+" --outdir "+out_dir+" --rapid "+" --device_count "+gpu
+    shell_runner_realtime(experiment.running_processes,"DeepBinner", command)
     # Function to run deepbinner from bash --> giving with it selected args
     # deepbinner command creator
     return None
