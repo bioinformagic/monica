@@ -84,11 +84,14 @@ class AssemblySubsetter():
     def genomes_fetcher(self):
         os.chdir(self.genomes_path)
         if not self.genomes_updated():
+            #enters here when genomes path is empty or to be updated
             pass
         os.chdir(self.home_path)
 
     def genomes_updated(self):
-        pass
+        if not os.listdir(self.genomes_path):
+            return 0
+        return 1
 
 
 
