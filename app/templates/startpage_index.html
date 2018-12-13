@@ -38,9 +38,9 @@
         </div>
         <select class="selectpicker form-control" name="species_list" multiple data-live-search="true" data-width="100%"
                 title="Select the species to live-track" style="padding: 10px">
-            {{ for name in data }}
+            {% for name in data %}
                 <option>{{ name }}</option>
-            {{ end for }}
+            {% endfor %}
         </select>
 
     </div>
