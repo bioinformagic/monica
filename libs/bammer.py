@@ -13,7 +13,6 @@ def hit_counter(barcodes):
         for i in paths:
             command = f"samtools view {i}  | cut -f 3"
             list_gi = shell_runner(command)
-            list_gi = list_gi[:-1]
             for gi in list_gi:
                 if gi == '*':
                     gi = 'unmapped'
@@ -33,7 +32,7 @@ def merge_bam(barcodes):
         paths_to_bam = ' '.join(barcodes[k])
         command = f"samtools merge -f {k}_merged.bam {paths_to_bam} | readlink -f {k}_merged.bam"  # readlink -f returns the path of the file
         path_to_merged = shell_runner(command)
-        barcodes_merged[k] = path_to_merged[:-1]
+        barcodes_merged[k] = path_to_merged
     return barcodes_merged
 
 
@@ -46,7 +45,7 @@ def hit_counter_from_list(filenames, barcode):
     genomes = dict()
     for name in filenames:
         command = f"samtools view ./{barcode}/bams/{name}.bam  | cut -f 3"
-        list_ids = shell_runner(command)[:-1]
+        list_ids = shell_runner(command)
         for hit in list_ids:
             if hit == '*': hit = 'unmapped';
             current = genomes.setdefault(hit, 0)
