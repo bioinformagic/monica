@@ -1,7 +1,7 @@
 import os
 import dbees as dbees
 import bammer as bammer
-from src.piper_pan import shell_runner, shell_runner_realtime, shell_realtime_stopper, run_deepbinner, read_MK_info
+from src.piper_pan import shell_runner, shell_runner_realtime, shell_realtime_stopper, run_deepbinner
 import multiprocessing as mp
 import pickle as pk
 

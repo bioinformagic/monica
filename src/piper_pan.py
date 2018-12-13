@@ -23,9 +23,9 @@ def run_deepbinner(experiment, cpuonly):
     in_dir = read_MK_info()
     out_dir = experiment.dirname
     if cpuonly:
-        gpu = "1"
+        gpu = "0"
     else:
-        gpu = "{'GPU': 1}"
+        gpu = "1"
 
     command = basecommand+" --indir "+in_dir+" --outdir "+out_dir+" --rapid "+" --device_count "+gpu
     shell_runner_realtime(experiment.running_processes,"DeepBinner", command)
