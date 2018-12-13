@@ -12,6 +12,13 @@ TABLE_HEADER_LINE=1
 
 
 class RefseqSubsetter():
+    """
+    DOCUMENT YOUR CLASS -- IT IS USELESS LIKE THIS
+
+    PUT ALL THAT IT DOES,
+    INFO ON ALL PROPERTIES DEFINED
+    INFO ON METHODS IMPLEMENTED
+    """
     def __init__(self,parents=PARENTS,refseq_path=PATHS[0],table_path=PATHS[1],header_line=TABLE_HEADER_LINE, refseq_summary_ftp=assembly_refseq_table_ftp):
         self.parents=parents
         self.descendants = [i for i in (ncbi.get_descendant_taxa(parents))]
@@ -34,9 +41,17 @@ class RefseqSubsetter():
     #                break
 
     def table_fetcher(self):
+        """
+        write a short description of every funtion
+        :return:
+        """
         pass
 
     def table_importer(self):
+        """
+        write a short description of every funtion
+        :return:
+        """
         #if not self.header:
         #    self.headerfinder()
         if not self.table:
@@ -45,6 +60,10 @@ class RefseqSubsetter():
             self.table=pd.read_table(self.table_path, header=self.header_line, low_memory=False)
 
     def merger(self):
+        """
+        write a short description of every funtion
+        :return:
+        """
         if not self.table:
             pass
         else:
@@ -52,7 +71,11 @@ class RefseqSubsetter():
             self.table=self.table.merge(taxids, on='taxid')
             ftps=self.table['ftp_path']
         
-     def ftp_downlaod(ftps):
+    def ftp_downlaod(ftps):
+        """
+        write a short description of every funtion
+        :return:
+        """
         for ftp in ftps:
             wget.download(ftp)
 

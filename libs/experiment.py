@@ -40,7 +40,7 @@ class Experiment():
         self.time = max_hours
         self.running_processes = list()
         for i in range(num_barcodes):
-            barcode = str(i)
+            barcode = "barcode"+str(i)
             self.barcodes[barcode] = list()
 
     def __enter__(self):
