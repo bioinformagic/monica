@@ -26,13 +26,12 @@
 <div class="card text-center">
   <div class="card-header">
     <ul class="nav nav-tabs card-header-tabs">
-      <li class="nav-item">
-       <!--for loop might be use to create barCode links-->
-        <a class="nav-link active" href="#">Bc1</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Bc2</a>
-      </li>
+<!--For loop to insert barCodes link --add links!!-->
+      {% for i in sample %}
+        <li class="nav-item">
+          <a class="nav-link active" href="#">{{i}}</a>
+        </li>
+      {% endfor %}
     </ul>
   </div>
 
