@@ -2,83 +2,96 @@ import os
 from ete3 import NCBITaxa
 import pandas as pd
 import wget
+import datetime as dt
 
 ncbi=NCBITaxa()
 
 PARENTS=['Fungi','Oomycota','Bacteria','Archaea','Viruses','Viroids','Nematodes','Rhizaria','Alveolata','Heterokonta']
-PATHS=['refseq_path','magic_table_path']
+PATHS=['genomes','magic_tables']
 assembly_refseq_table_ftp='ftp://ftp.ncbi.nlm.nih.gov/genomes/refseq/assembly_summary_refseq.txt'
+assembly_genbank_table_ftp='ftp://ftp.ncbi.nlm.nih.gov/genomes/genbank/assembly_summary_genbank.txt'
 TABLE_HEADER_LINE=1
+HOME=os.getcwd()
 
-
-class RefseqSubsetter():
-    """
-    DOCUMENT YOUR CLASS -- IT IS USELESS LIKE THIS
-
-    PUT ALL THAT IT DOES,
-    INFO ON ALL PROPERTIES DEFINED
-    INFO ON METHODS IMPLEMENTED
-    """
-    def __init__(self,parents=PARENTS,refseq_path=PATHS[0],table_path=PATHS[1],header_line=TABLE_HEADER_LINE, refseq_summary_ftp=assembly_refseq_table_ftp):
+class AssemblySubsetter():
+    ''' Gonna write the documentation, I swear it'''
+    def __init__(self, parents=PARENTS, genomes=PATHS[0], tables=PATHS[1], header_line=TABLE_HEADER_LINE, refseq_summary_ftp=assembly_refseq_table_ftp, genbank_summary_ftp=assembly_genbank_table_ftp, home_path=HOME):
         self.parents=parents
-        self.descendants = [i for i in (ncbi.get_descendant_taxa(parents))]
-        self.refseq_path=f'{os.getcwd()}/{refseq_path}'
-        self.table_path=f'{os.getcwd()}/{table_path}'
+        self.descendants = []
+        self.home_path=home_path
+        self.genomes_path= f'{self.home_path}/{genomes}'
+        self.tables_path= f'{self.home_path}/{tables}'
         self.refseq_summary_ftp=refseq_summary_ftp
-        self.header=''
+        self.genbank_summary_ftp=genbank_summary_ftp
         self.header_line=header_line
-        self.table=None
-        for path in PATHS:
+        self.ftps=[]
+        self.refseq_table=None
+        self.genbank_table=None
+        self.genera=[]
+        for path in [self.genomes_path, self.tables_path]:
             if not os.path.exists(path):
                 os.mkdir(path)
 
-    #def headerfinder(self):
-    #    with open('assembly_summary_refseq.txt', 'r') as file:
-    #        for i, line in enumerate(file):
-    #            if i == self.header_line:
-    #                 self.header= line.split(sep='\t')
-    #            elif i > self.header_line:
-    #                break
+    def descendants_finder(self):
+        for parent in self.parents:
+            for i in ncbi.get_descendant_taxa(parent):
+                self.descendants.append(i)
 
-    def table_fetcher(self):
-        """
-        write a short description of every funtion
-        :return:
-        """
-        pass
+    def tables_fetcher(self):
+        os.chdir(self.tables_path)
+        if not self.tables_updater():
+            wget.download(self.refseq_summary_ftp)
+            wget.download(self.genbank_summary_ftp)
+            with open ('log', 'w+') as log:
+                log.write(str(dt.date.today()))
+        os.chdir(self.home_path)
 
-    def table_importer(self):
-        """
-        write a short description of every funtion
-        :return:
-        """
-        #if not self.header:
-        #    self.headerfinder()
-        if not self.table:
-            self.table_fetcher()
-        else:
-            self.table=pd.read_table(self.table_path, header=self.header_line, low_memory=False)
+    def tables_updater(self):
+        if not os.listdir(self.tables_path):
+            return 0
+        with open('log', 'r') as log:
+            date=log.read()
+        date=dt.datetime.strptime(date,'%Y-%m-%d')
+        delta=dt.datetime.now()-date
+        if delta.days>7:
+            return 0
+        return 1
+
+    def tables_importer(self):
+        if not (self.refseq_table or self.genbank_table):
+            self.tables_fetcher()
+        self.refseq_table=pd.read_table(f'{self.tables_path}/{self.refseq_summary_ftp.split(sep="/")[-1]}', header=self.header_line, low_memory=False)
+        self.genbank_table=pd.read_table(f'{self.tables_path}/{self.genbank_summary_ftp.split(sep="/")[-1]}', header=self.header_line, low_memory=False)
 
     def merger(self):
-        """
-        write a short description of every funtion
-        :return:
-        """
-        if not self.table:
-            pass
-        else:
-            taxids=pd.DataFrame.from_records(self.descendants, columns=['taxid'])
-            self.table=self.table.merge(taxids, on='taxid')
-            ftps=self.table['ftp_path']
-        
-    def ftp_downlaod(ftps):
-        """
-        write a short description of every funtion
-        :return:
-        """
-        for ftp in ftps:
-            wget.download(ftp)
+        if not self.refseq_table:
+            self.tables_importer()
+        if not self.descendants:
+            self.descendants_finder()
+
+        taxids=pd.DataFrame(self.descendants, columns=['taxid'])
+        self.refseq_table = self.refseq_table.merge(taxids, on='taxid')
+
+        for name in self.refseq_table['organism_name']:
+            self.genera.append(name.split(sep=' ')[0])
+        self.refseq_table['genera']=self.genera
+
+        self.refseq_table=self.refseq_table.drop_duplicates(subset=['genera'], keep='last')
+
+        for genus, ftp in zip(self.refseq_table.iloc[:,-1], self.refseq_table.iloc[:,-2]):
+            self.ftps.append((genus, ftp))
+
+    def genomes_fetcher(self):
+        pass
+
+    def genomes_updater(self):
+        pass
+
+    def
 
 
 if __name__ == '__main__':
-   pass
+
+    rs=AssemblySubsetter()
+    rs.merger()
+
