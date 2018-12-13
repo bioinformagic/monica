@@ -1,6 +1,7 @@
 import os
 from ete3 import NCBITaxa
 import pandas as pd
+import wget
 
 ncbi=NCBITaxa()
 
