@@ -38,7 +38,7 @@ def shell_runner(cmd):
     # general function than takes a shell command and returns a list of strings with the output
     try:
         command = subprocess.check_output(cmd, shell=True, executable='/bin/bash')
-        command = command.decode("utf-8").split(sep="\n")
+        command = command.decode("utf-8").strip().split(sep="\n")
         return command
     except subprocess.CalledProcessError as e:
         print(e.ouput)

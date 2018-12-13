@@ -2,6 +2,10 @@ from src.piper_pan import shell_runner
 
 
 def hit_counter(barcodes):
+    """
+    :param barcodes: a dict {barcode:list of the paths of bam files}
+    :return: a dict {barcodes:{genome:#hits,..., unmapped:#hits}}
+        """
     counts = dict()
     for k in barcodes.keys():
         paths = barcodes[k]
@@ -20,6 +24,10 @@ def hit_counter(barcodes):
 
 
 def merge_bam(barcodes):
+    """
+    :param barcodes: a dict {barcode:list of the paths of bam files}
+    :return: a dict {barcode:path to the file of merged bams}
+    """
     barcodes_merged = dict()
     for k in barcodes.keys():
         paths_to_bam = ' '.join(barcodes[k])

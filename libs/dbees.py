@@ -54,15 +54,21 @@ def download_db(taxids, exp_name):
     """
     taxids = ','.join(taxids)
     query = f'elink -db taxonomy -id {taxids} -target assembly | esummary | xtract -pattern FtpPath_RefSeq -element FtpPath_RefSeq'
-
     genome_directory = shell_runner(query)
-    # for each taxid in genome_directory
-    fasta_name = genome_directory.split('/')[-1] + '_genomic.fna.gz'
+    create_directory = f'mkdir -p /home/elisa/Desktop/BPP/{exp_name}'
+    shell_runner(create_directory)
 
-    wget.download(genome_directory+"/"+fasta_name)
+    for url in genome_directory:
+        fasta_name = url.split('/')[-1] + '_genomic.fna.gz'
+
+        wget.download(url+"/"+fasta_name, out=f'/home/elisa/Desktop/BPP/{exp_name}')
+
 
     # unzip every file and merge it into a unique fasta
     # pass this file to minimap indexer, and call the db created (if possible) exp_name
+
+def minimap_indexing(path, expname):
+    pass
 
 
 def import_blastdb(path):
@@ -92,3 +98,8 @@ def names_to_taxid(names):
 
     return taxids
 
+
+
+
+taxi=['5855','6239']
+print(download_db(taxi, 'exp1'))
