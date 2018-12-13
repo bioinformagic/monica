@@ -39,14 +39,14 @@ class AssemblySubsetter():
 
     def tables_fetcher(self):
         os.chdir(self.tables_path)
-        if not self.tables_updater():
+        if not self.tables_updated():
             wget.download(self.refseq_summary_ftp)
             wget.download(self.genbank_summary_ftp)
             with open ('log', 'w+') as log:
                 log.write(str(dt.date.today()))
         os.chdir(self.home_path)
 
-    def tables_updater(self):
+    def tables_updated(self):
         if not os.listdir(self.tables_path):
             return 0
         with open('log', 'r') as log:
@@ -82,12 +82,15 @@ class AssemblySubsetter():
             self.ftps.append((genus, ftp))
 
     def genomes_fetcher(self):
+        os.chdir(self.genomes_path)
+        if not self.genomes_updated():
+            pass
+        os.chdir(self.home_path)
+
+    def genomes_updated(self):
         pass
 
-    def genomes_updater(self):
-        pass
 
-    def
 
 
 if __name__ == '__main__':
