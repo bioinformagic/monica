@@ -103,13 +103,13 @@ class AssemblySubsetter():
                 with gzip.open(name, 'rt') as handle: #poen the zip file
                     with open(f_name, 'w') as file:
                         f = seq.parse(handle, 'fasta')
-                        Value = []
                         for  index , value in enumerate(f):
+                                Value = []
                                 value.id = genus+ '_'+ str(index) #index modification
                                 value.name = genus + '_'+ str(index)
                                 value.description = genus+ '_'+ str(index)
                                 Value.append(value)
-                                seq.write(Value[-1], file, 'fasta') #re-add sequences to a newfile with updated name 
+                                seq.write(Value, file, 'fasta') #re-add sequences to a newfile with updated name 
                 sbp.Popen('gzip ' + f_name, shell=True) #zip new file
                 os.remove(name)#remove old file
             else:
