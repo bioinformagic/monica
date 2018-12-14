@@ -1,3 +1,4 @@
+import subprocess as sbp
 import os
 from ete3 import NCBITaxa
 import pandas as pd
@@ -92,7 +93,27 @@ class AssemblySubsetter():
         if not os.listdir(self.genomes_path):
             return 0
         return 1
-
+    def genus_tag(self.ftps):
+        for x in self.ftps:
+            genus=x[0]
+            name=x[1].split('/')[-1] #name with extension
+            name_ext=('.').join(name.split('.')[:-1]) #namewithoutextension
+            f_name= name_ext[:-4]+'_'+genus+'.fna' #finalnamewithgenus
+            if name in os.listdir(os.getcwd()):
+                with gzip.open(name, 'rt') as handle: #poen the zip file
+                    with open(f_name, 'w') as file:
+                        f = seq.parse(handle, 'fasta')
+                        Value = []
+                        for  index , value in enumerate(f):
+                                value.id = genus+ '_'+ str(index) #index modification
+                                value.name = genus + '_'+ str(index)
+                                value.description = genus+ '_'+ str(index)
+                                Value.append(value)
+                                seq.write(Value[-1], file, 'fasta') #re-add sequences to a newfile with updated name 
+                sbp.Popen('gzip ' + f_name, shell=True) #zip new file
+                os.remove(name)#remove old file
+            else:
+                pass
 
 
 
