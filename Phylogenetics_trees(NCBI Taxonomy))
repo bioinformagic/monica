@@ -1,1 +1,12 @@
 
+'''Bio.Phylo is written as a sub-package within the Biopython code base,
+and is installed along with the Biopython distribution. It has been available 
+as part of the Biopython library since version 1.54, released in May 2010.
+
+The library can be used in Python versions 3.1 or later,
+without any external libraries required at the time of installation. Functions
+that rely on external libraries are written within a separate module of the code base,
+and import their dependencies at run-time. This design makes it possible to install Biopython 
+and use the rest of Bio.Phylo without having installed the dependencies for these specific functions.
+Because Bio.Phylo is written entirely in Python, it also runs on alternative implementations of Python:
+Jython 2.5 and Pypy 1.6 through 1.9 in particular pass the module’s unit testing suite.'''
