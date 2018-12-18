@@ -55,21 +55,32 @@ def download_db(taxids, exp_name):
     taxids = ','.join(taxids)
     query = f'elink -db taxonomy -id {taxids} -target assembly | esummary | xtract -pattern FtpPath_RefSeq -element FtpPath_RefSeq'
     genome_directory = shell_runner(query)
-    create_directory = f'mkdir -p /home/elisa/Desktop/BPP/{exp_name}'
+    create_directory = f'mkdir -p $DB/{exp_name}'
     shell_runner(create_directory)
-
+    
+    fasta_list=[]
     for url in genome_directory:
         fasta_name = url.split('/')[-1] + '_genomic.fna.gz'
-
-        wget.download(url+"/"+fasta_name, out=f'/home/elisa/Desktop/BPP/{exp_name}')
-
-
-    # unzip every file and merge it into a unique fasta
-    # pass this file to minimap indexer, and call the db created (if possible) exp_name
-
-def minimap_indexing(path, expname):
-    pass
-
+        wget.download(url+"/"+fasta_name, out=f'$DB/{exp_name}')
+        fasta_list.append(fasta_name)
+    fasta_list = ' '.join(fasta_list)
+    concatenate = f'cat {fasta_list} > $DB/{exp_name}/concatenated.gz'
+    shell_runner(concatenate)
+    path = '$DB/{exp_name}/concatenated.gz'
+    minimap_indexing(exp_name, path)
+    
+    # merge every file into a unique gz file
+    # pass this file to minimap indexer
+    
+def minimap_indexing(dbname, path):
+    '''
+    Create minimap index
+    :param dbname: name of the database
+    :param path: path to the compressed file containing genome sequences of interest
+    :return: None
+    '''
+    index_cmd = f'minimap2 -d $DB/{dbname}.mmi {path}'
+    shell_runner(index_cmd)
 
 def import_blastdb(path):
     """
@@ -99,7 +110,3 @@ def names_to_taxid(names):
     return taxids
 
 
-
-
-taxi=['5855','6239']
-print(download_db(taxi, 'exp1'))
