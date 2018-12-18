@@ -4,6 +4,9 @@ from ete3 import NCBITaxa
 import pandas as pd
 import wget
 import datetime as dt
+import gzip
+from Bio import  SeqIO as seq
+
 
 ncbi=NCBITaxa()
 
@@ -93,10 +96,10 @@ class AssemblySubsetter():
         if not os.listdir(self.genomes_path):
             return 0
         return 1
-    def genus_tag(self.ftps):
+    def genus_tag(self):
         path_to_fasta= 'db.fasta' #name of the file eventually created
         while len(os.listdir())!=1:
-            with open(path_to_fasta, 'w') as col:
+            with open(path_to_fasta, 'w+') as col:
                 for x in self.ftps:
                     genus=x[0]
                     name=x[1].split('/')[-1] #name with extension
