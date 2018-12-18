@@ -88,8 +88,11 @@ class AssemblySubsetter():
     def genomes_fetcher(self):
         os.chdir(self.genomes_path)
         if not self.genomes_updated():
-            #enters here when genomes path is empty or to be updated
-            pass
+            for x in self.ftps:
+                if x[1].split('/')[-1] not in os.listdir():  #if the file is not present in the folder 
+                    wget.download(x[1]) #download using ftp
+                else:
+                   pass
         os.chdir(self.home_path)
 
     def genomes_updated(self):
