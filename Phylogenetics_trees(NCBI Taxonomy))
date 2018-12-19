@@ -10,3 +10,17 @@ and import their dependencies at run-time. This design makes it possible to inst
 and use the rest of Bio.Phylo without having installed the dependencies for these specific functions.
 Because Bio.Phylo is written entirely in Python, it also runs on alternative implementations of Python:
 Jython 2.5 and Pypy 1.6 through 1.9 in particular pass the module’s unit testing suite.'''
+
+"""for a try"""
+#first you create a file with newick format
+#newick format uses nested parentheses to represent hierarchical data structures as text strings
+from ete3 import Tree
+string = '((((H,K),(F,I)G),E),((L,(N,Q)O),(P,S)));'
+t = Tree(string, format=1)
+t.write(format=1, outfile="new_tree.nw")
+
+#After writting newick format file you then run it using the following codes
+#to get an output as picture file you use these code : >>>Phylo.draw(tree)
+from Bio import Phylo
+tree = Phylo.read("new_tree.nw", "newick")
+Phylo.draw_ascii(tree)
