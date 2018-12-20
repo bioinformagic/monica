@@ -12,8 +12,10 @@ Because Bio.Phylo is written entirely in Python, it also runs on alternative imp
 Jython 2.5 and Pypy 1.6 through 1.9 in particular pass the module’s unit testing suite.'''
 
 """for a try"""
+#Make sure you have installed ete3 otherwise run these bash script "conda install -c etetoolkit ete3"
 #first you create a file with newick format
 #newick format uses nested parentheses to represent hierarchical data structures as text strings
+
 from ete3 import Tree
 string = '((((H,K),(F,I)G),E),((L,(N,Q)O),(P,S)));'
 t = Tree(string, format=1)
@@ -24,3 +26,21 @@ t.write(format=1, outfile="new_tree.nw")
 from Bio import Phylo
 tree = Phylo.read("new_tree.nw", "newick")
 Phylo.draw_ascii(tree)
+
+
+
+#to use this these codes you need first to upload a file containing scientific names of the pathogens separated by commas
+#to do this you have a link "https://phylot.biobyte.de/" that will help you to create a new file with NEWICK or NEXUS format
+#basically Phylot generates phylogenetic trees based on the NCBI taxonomy. From a list of taxonomic names, 
+#identifiers or protein accessions, phyloT will generate a pruned tree in the selected output format. 
+#Complete clades can be simply included, with interruption at desired taxonomic levels and 
+#with optional filtering of unwanted nodes
+
+#THEN YOU CAN DOWNLOAD NEWICK FORMAT FILE e.g: phyloT_generated_tree_NNNNNNNNN_newick
+downloaded_file_from_Phylot = "phyloT_generated_tree_NNNNNNNNN_newick"
+from Bio import Phylo
+filename = downloaded_file_from_Phylot
+tree = Phylo.read(filename, "newick")
+Phylo.draw(tree)
+
+#This will give out a phylogenetics picture of all organism listed in the uploaded file
