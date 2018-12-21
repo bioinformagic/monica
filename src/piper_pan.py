@@ -2,6 +2,8 @@ __doc__ = """Main python file for calling and maintaining the pipeline.
 
 #THIS PIPELINE NEVER GROWS OLD (Besides maybe the tools used ^^)
 Built with <3 by Bioinformatics Bachelor Class of 2015, La Sapienza, 2018
+
+!!NOTE --> The functions in this script need to be embedded into the main experiment class!!
 """
 
 import subprocess
@@ -84,16 +86,26 @@ def albacore_watchdog():
     #function that checks if the files of this
     return None
 
-def albacore_runner():
+def albacore_runner(experiment,inputdir, outputdir):
+
     # get all the directories in the directory (check also for new ones) and run an instance of albacore
     # while albacore watchdog returns true rerun the finished albacore instance
-    return None
+
+    # taking that all fastq are to be found in the targetdir (
+    curr_files = get_files(inputdir)
+    command = ""
+    shell_runner_realtime(experiment.running_processes,"Albacore", command)
+    #cleanup
+    output = list(set(get_files(dir)) - set(curr_files))
+    return output
 
 
-def test_wd_albacore(directory, experiment=None):
+def test_wd_albacore(experiment,bc):
     f5_basecalled = []
     output = []
-    procdir = os.path.join(directory,"processing")
+    workingdir = os.path.join(experiment.dirname,bc)
+    procdir = os.path.join(workingdir,"processing")
+    targetdir = os.path.join(workingdir,"basecalled")
     os.makedirs(procdir,exist_ok=True)
     while experiment.status == "processing":
 
@@ -102,15 +114,15 @@ def test_wd_albacore(directory, experiment=None):
         processing = []
 
         #get difference between files created from DeepBinner and Files that got already basecalled
-        diff_files = set(get_files(directory)) - set(f5_basecalled)
+        diff_files = set(get_files(workingdir)) - set(f5_basecalled)
 
         for file in diff_files:
-            os.symlink(os.path.join(directory,file),os.path.join(procdir,file))
+            os.symlink(os.path.join(workingdir,file),os.path.join(procdir,file))
             processing.append(file)
             #for each not basecalled file create a symlink in the processing dir and add it to the processing list
 
         #run the albacore runner function that returns a list of the processed files by albacore
-        proc_fq = albacore_runner(experiment.dirname)
+        proc_fq = albacore_runner(experiment, procdir, targetdir)
         f5_basecalled = f5_basecalled + processing
         #prepare output as couple of fast5 and corresponding fastq files
         output.append([processing,proc_fq])
@@ -121,7 +133,7 @@ def test_wd_albacore(directory, experiment=None):
 
     return output
 
-# def test_lowest(fname,dir,dbim):
+# def test_lowest(experiment):
 #     #imitated DB and create new files outside processing
 #
 #     shell_runner(("touch %s/db_%s") % (dbim, fname))
@@ -133,7 +145,12 @@ def test_wd_albacore(directory, experiment=None):
 #     shell_runner("sleep 2")
 #     #return created files
 #     output = list(set(get_files(dir)) - set(curr_files))
-#
+#read_fast5_basecaller.py -f "The_Flow_Cell_Version_Used"
+#  -k "Sequencing_Kit"
+#  -t "Howmany_working_threads"
+#  -s ~/workdirectory_where_basecalled_files_willbe_saved
+# -o "output_fastq"
+# -i ~/workdirectory_where_raw_reads_are
 #     return output
 
 def get_files(directory):

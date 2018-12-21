@@ -25,11 +25,13 @@ class Experiment():
 
     def __init__(self,
                  expname,
+                 sequencing_kit,
+                 flow_cell,
                  dirname=os.getcwd(),
                  id_list="",
                  threads=mp.cpu_count(),
                  num_barcodes=12,
-                 max_hours=48,
+                 max_hours=48
                  ):
         self.expname = expname
         self.dirname = dirname
