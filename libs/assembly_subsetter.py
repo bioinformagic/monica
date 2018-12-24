@@ -32,6 +32,7 @@ class AssemblySubsetter():
         self.refseq_table=None
         self.genbank_table=None
         self.genera=[]
+        self.index='out.mmi'
         for path in [self.genomes_path, self.tables_path]:
             if not os.path.exists(path):
                 os.mkdir(path)
@@ -99,27 +100,33 @@ class AssemblySubsetter():
         if not os.listdir(self.genomes_path):
             return 0
         return 1
-    def genus_tag(self):
-        path_to_fasta= 'db.fasta' #name of the file eventually created
-        while len(os.listdir())!=1:
-            with open(path_to_fasta, 'w+') as col:
-                for x in self.ftps:
-                    genus=x[0]
-                    name=x[1].split('/')[-1] #name with extension
-                    if name in os.listdir(os.getcwd()):
-                        with gzip.open(name, 'rt') as handle:
-                                f = seq.parse(handle, 'fasta')
-                                for  index , value in enumerate(f):
-                                        Value=[]
-                                        value.id = genus+ '_'+ str(index)
-                                        value.name = genus + '_'+ str(index)
-                                        value.description = genus+ '_'+ str(index)
-                                        Value.append(value)
-                                        seq.write(Value, col, 'fasta')
-                        os.remove(name)
-                    else:
-                         pass
-        sbp.Popen('gzip ' + path_to_fasta, shell=True)
+    # def genus_tag(self):
+    #     path_to_fasta= 'db.fasta' #name of the file eventually created
+    #     while len(os.listdir())!=1:
+    #         with open(path_to_fasta, 'w+') as col:
+    #             for x in self.ftps:
+    #                 genus=x[0]
+    #                 name=x[1].split('/')[-1] #name with extension
+    #                 if name in os.listdir(os.getcwd()):
+    #                     with gzip.open(name, 'rt') as handle:
+    #                             f = seq.parse(handle, 'fasta')
+    #                             for  index , value in enumerate(f):
+    #                                     Value=[]
+    #                                     value.id = genus+ '_'+ str(index)
+    #                                     value.name = genus + '_'+ str(index)
+    #                                     value.description = genus+ '_'+ str(index)
+    #                                     Value.append(value)
+    #                                     seq.write(Value, col, 'fasta')
+    #                     os.remove(name)
+    #                 else:
+    #                      pass
+    #     sbp.Popen('gzip ' + path_to_fasta, shell=True)
+
+    def indexing(self):
+        os.chdir(self.genomes_path)
+        sbp.Popen(f'minimap2 -d {self.index} db.fasta.gz', shell=True)
+        os.chdir(self.home_path)
+
 
 
 
@@ -127,5 +134,6 @@ class AssemblySubsetter():
 if __name__ == '__main__':
 
     rs=AssemblySubsetter()
-    rs.merger()
+    rs.indexing()
+
 
